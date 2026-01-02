@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Scraping Tool - Welcome</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0e17;
+            --color-bg-card: #111827;
+            --color-bg-card-hover: #1a2332;
+            --color-primary: #10b981;
+            --color-primary-glow: rgba(16, 185, 129, 0.3);
+            --color-secondary: #06b6d4;
+            --color-accent: #8b5cf6;
+            --color-text: #f1f5f9;
+            --color-text-muted: #94a3b8;
+            --color-border: #1e293b;
+            --font-main: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, var(--color-primary-glow), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(6, 182, 212, 0.15), transparent),
+                radial-gradient(ellipse 40% 30% at 10% 60%, rgba(139, 92, 246, 0.1), transparent);
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black, transparent);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--color-border);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-primary);
+            margin-bottom: 24px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInDown 0.6s ease-out 0.1s both;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInDown 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .step {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.3s; }
+        .step:nth-child(2) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step:hover {
+            background: var(--color-bg-card-hover);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 60px var(--color-primary-glow);
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step:hover::before {
+            opacity: 1;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 12px;
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-bg);
+        }
+
+        .step-content h2 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .step-content p {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        .step-content .highlight {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 10px;
+            background: rgba(16, 185, 129, 0.15);
+            border-radius: 6px;
+            color: var(--color-primary);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+        }
+
+        .step-image {
+            margin-top: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover .step-image {
+            transform: scale(1.02);
+        }
+
+        .step-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-border);
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-link:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .footer-link svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 16px;
+            }
+
+            .step {
+                padding: 24px;
+            }
+
+            .step-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="badge">Successfully Installed</div>
+            <h1 class="title">Data Scraping Tool is Ready!</h1>
+            <p class="subtitle">
+                Extract data from any website with ease. Follow the quick setup steps below to get started.
+            </p>
+        </header>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h2>Pin the Extension</h2>
+                        <p>
+                            Click the <span class="highlight">🧩 puzzle icon</span> in the top-right corner of Chrome, then click the <span class="highlight">📌 pin</span> next to Data Scraping Tool to keep it visible in your toolbar.
+                        </p>
+                    </div>
+                </div>
+                <div class="step-image">
+                    <img src="pin_app.webp" alt="How to pin Data Scraping Tool extension" loading="lazy">
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h2>Start Scraping</h2>
+                        <p>
+                            Navigate to any webpage and click the <span class="highlight">🕸️ Data Scraping Tool icon</span> in your toolbar. Select elements, extract data, and export to CSV or JSON with just a few clicks.
+                        </p>
+                    </div>
+                </div>
+                <div class="step-image">
+                    <img src="use_app.webp" alt="How to use Data Scraping Tool" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p class="footer-text">Need help? Check out our resources:</p>
+            <div class="footer-links">
+                <a href="https://github.com/aleksandrov-dima" target="_blank" rel="noopener noreferrer" class="footer-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+                <a href="mailto:support@datascraping.tool" class="footer-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Contact Support
+                </a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
