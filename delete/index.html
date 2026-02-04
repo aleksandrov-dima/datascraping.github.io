@@ -27,13 +27,20 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
             font-family: var(--font-main);
             background: var(--color-bg);
             color: var(--color-text);
             line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .bg-pattern {
@@ -50,43 +57,42 @@
         }
 
         .container {
+            width: 100%;
             max-width: 700px;
-            margin: 0 auto;
-            padding: 60px 24px;
+            height: 100%;
+            padding: 24px;
             position: relative;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            flex-shrink: 0;
+            margin-bottom: 20px;
         }
 
         .logo-wrapper {
             display: flex;
             justify-content: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             animation: fadeInDown 0.5s ease-out;
         }
 
         .logo {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             filter: drop-shadow(0 0 20px var(--color-primary-glow));
         }
 
         .title {
-            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
             font-weight: 600;
-            margin-bottom: 12px;
             color: var(--color-text);
             animation: fadeInDown 0.6s ease-out 0.1s both;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            color: var(--color-text-muted);
-            animation: fadeInDown 0.6s ease-out 0.2s both;
         }
 
         @keyframes fadeInDown {
@@ -101,6 +107,8 @@
         }
 
         .form-wrapper {
+            flex: 1;
+            min-height: 0;
             background: var(--color-bg-card);
             border: 1px solid var(--color-border);
             border-radius: 20px;
@@ -110,7 +118,7 @@
 
         .form-wrapper iframe {
             width: 100%;
-            height: 500px;
+            height: 100%;
             border: none;
             display: block;
         }
@@ -126,32 +134,9 @@
             }
         }
 
-        .form-link {
-            display: block;
-            text-align: center;
-            margin-top: 24px;
-            padding: 16px;
-        }
-
-        .form-link a {
-            color: var(--color-primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: opacity 0.2s ease;
-        }
-
-        .form-link a:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
         @media (max-width: 640px) {
             .container {
-                padding: 40px 16px;
-            }
-
-            .form-wrapper iframe {
-                height: 450px;
+                padding: 16px;
             }
         }
     </style>
@@ -165,7 +150,6 @@
                 <img src="../logo.png" alt="Data Scraping Tool" class="logo">
             </div>
             <h1 class="title">We're sorry to see you go</h1>
-            <p class="subtitle">Your feedback helps us to improve Data Scraping Tool. Thank you very much for your time!</p>
         </header>
 
         <div class="form-wrapper">
@@ -177,12 +161,6 @@
                 title="Why have you deleted Data Scraping Tool?">
                 Loading…
             </iframe>
-        </div>
-
-        <div class="form-link">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLScBZRlAXIZLOv4i1ArhcfDVQxGPNcf54aAbRCAEAXKIdxlQ8A/viewform?usp=header" target="_blank" rel="noopener">
-                Open form in new tab
-            </a>
         </div>
     </div>
 </body>
